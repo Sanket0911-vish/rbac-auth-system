@@ -1,0 +1,28 @@
+CREATE DATABASE rbac_example;
+
+USE rbac_example;
+
+CREATE TABLE Roles (
+    RoleId INT PRIMARY KEY IDENTITY(1,1),
+    RoleName VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Users (
+    UserId INT PRIMARY KEY IDENTITY(1,1),
+    Username VARCHAR(50) NOT NULL,
+    PasswordHash VARCHAR(255) NOT NULL,
+    RoleId INT,
+    FOREIGN KEY (RoleId) REFERENCES Roles(RoleId)
+);
+
+CREATE TABLE Permissions (
+    PermissionId INT PRIMARY KEY IDENTITY(1,1),
+    PermissionName VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE RolePermissions (
+    RoleId INT,
+    PermissionId INT,
+    FOREIGN KEY (RoleId) REFERENCES Roles(RoleId),
+    FOREIGN KEY (PermissionId) REFERENCES Permissions(PermissionId)
+);

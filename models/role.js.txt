@@ -1,0 +1,15 @@
+// models/role.js
+const sql = require('mssql');
+const config = require('../config').dbConfig;
+
+class Role {
+    static async findById(roleId) {
+        const pool = await sql.connect(config);
+        const result = await pool.request()
+            .input('RoleId', sql.Int, roleId)
+            .query('SELECT * FROM Roles WHERE RoleId = @RoleId');
+        return result.recordset[0];
+    }
+}
+
+module.exports = Role;

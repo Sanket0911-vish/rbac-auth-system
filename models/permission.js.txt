@@ -1,0 +1,20 @@
+// models/permission.js
+const sql = require('mssql');
+const config = require('../config').dbConfig;
+
+class Permission {
+    static async findByRoleId(roleId) {
+        const pool = await sql.connect(config);
+        const result = await pool.request()
+            .input('RoleId', sql.Int, roleId)
+            .query(`
+                SELECT p.PermissionName 
+                FROM Permissions p
+                JOIN RolePermissions rp ON p.PermissionId = rp.PermissionId
+                WHERE rp.RoleId = @RoleId
+            `);
+        return result.recordset;
+    }
+}
+
+module.exports = Permission;
